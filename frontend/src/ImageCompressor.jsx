@@ -6,7 +6,7 @@ import axios from 'axios';
 
 
 function ImageCompressor() {
-  const URLBackend = import.meta.env.VITE_BACKEND
+  const URLBackend = import.meta.env.VITE_BACKEND || "https://img-compressor.onrender.com"
   const [file, setFile] = useState(null);
   const [quality, setQuality] = useState(80);
   const [preview, setPreview] = useState(null);
