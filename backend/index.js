@@ -6,7 +6,15 @@ const fs = require('fs');
 const app = express();
 const cors = require('cors');
 app.use(cors());
-// const upload = multer({ dest: 'uploads/' })
+const cors = require('cors');
+app.use(
+  cors({
+    origin: 'https://img-compressor-iota.vercel.app/',
+  })
+);
+
+
+
 require('dotenv').config()
 
 const port = process.env.PORT || 4000;
