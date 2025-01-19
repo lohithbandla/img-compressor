@@ -7,13 +7,6 @@ const app = express();
 const cors = require('cors');
 app.use(cors());
 
-app.use(
-  cors({
-    origin: 'https://img-compressor-iota.vercel.app/',
-  })
-);
-
-
 
 require('dotenv').config()
 
