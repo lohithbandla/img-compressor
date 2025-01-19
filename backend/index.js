@@ -10,6 +10,16 @@ app.use(cors());
 require('dotenv').config()
 
 const port = process.env.PORT || 4000;
+
+const uploadDir = path.join(__dirname, 'uploads');
+
+// Check if it exists, create if not
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
+
+
+
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
       cb(null, 'uploads')
