@@ -8,6 +8,7 @@ import { Home } from 'lucide-react';
 import HomePage from './components/HomePage';
 import PDFProcessor from './components/SplitPdfs';
 import { Analytics } from "@vercel/analytics/react"
+import Convert from './components/Covert';
 
 function App() {
 
@@ -16,6 +17,7 @@ function App() {
     <>
       <BrowserRouter>
       <Routes>
+        <Route path='/convert' element={<Convert/>}></Route>
         <Route path='/split' element={<PDFProcessor/>}></Route>
         <Route path="/" element={<HomePage />} />
         <Route path="/compress" element={<ImageCompressor />} />

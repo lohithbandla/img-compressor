@@ -3,10 +3,14 @@ const multer = require('multer');
 const sharp = require('sharp');
 const path = require('path');
 const fs = require('fs');
-const PDFDocument = require('pdfkit'); // For PDF creation
-const { PDFDocument: PDFLib } = require('pdf-lib'); // For PDF merging
-const app = express();
+const PDFDocument = require('pdfkit');
+const { PDFDocument: PDFLib } = require('pdf-lib');
 const cors = require('cors');
+
+// Import conversion routes
+const conversionRoutes = require('./routes/conversion');
+
+const app = express();
 
 app.use(cors());
 app.use(express.json());
@@ -34,7 +38,7 @@ const storage = multer.diskStorage({
   }
 });
 
-// Updated file filter to accept both images and PDFs
+// Original file filter for images and PDFs only
 const fileFilter = (req, file, cb) => {
   if (file.mimetype.startsWith('image/') || file.mimetype === 'application/pdf') {
     cb(null, true);
@@ -52,10 +56,13 @@ const upload = multer({
 app.use('/compressed', express.static('compressed'));
 app.use('/merged', express.static('merged'));
 
+// Use conversion routes
+app.use('/api', conversionRoutes);
 
 app.get('/', (req, res) => {
   res.send('Server is live');
 });
+
 // Original image compression endpoint
 app.post('/upload', upload.single('file'), async (req, res) => {
   try {
@@ -65,8 +72,8 @@ app.post('/upload', upload.single('file'), async (req, res) => {
 
     // Compress the image
     await sharp(filePath)
-      .resize(800) // Resize width to 800px, keeping aspect ratio
-      .jpeg({ quality: quality }) // Compress to specified quality
+      .resize(800)
+      .jpeg({ quality: quality })
       .toFile(compressedPath);
 
     // Delete the original uploaded file
@@ -82,22 +89,19 @@ app.post('/upload', upload.single('file'), async (req, res) => {
   }
 });
 
-// New PDF merging endpoint
+// PDF merging endpoint
 app.post('/merge-pdfs', upload.array('pdfs', 10), async (req, res) => {
   try {
     if (!req.files || req.files.length < 2) {
       return res.status(400).json({ error: 'Please upload at least 2 PDF files' });
     }
 
-    // Verify all files are PDFs
     const nonPdfFiles = req.files.filter(file => file.mimetype !== 'application/pdf');
     if (nonPdfFiles.length > 0) {
-      // Clean up uploaded files
       req.files.forEach(file => fs.unlinkSync(file.path));
       return res.status(400).json({ error: 'All files must be PDF format' });
     }
 
-    // Create merged PDF
     const mergedPdf = await PDFLib.create();
     
     for (const file of req.files) {
@@ -108,14 +112,12 @@ app.post('/merge-pdfs', upload.array('pdfs', 10), async (req, res) => {
       pages.forEach(page => mergedPdf.addPage(page));
     }
 
-    // Save merged PDF
     const pdfBytes = await mergedPdf.save();
     const mergedFileName = `merged-${Date.now()}.pdf`;
     const mergedPath = path.join(mergedDir, mergedFileName);
     
     fs.writeFileSync(mergedPath, pdfBytes);
 
-    // Clean up original uploaded files
     req.files.forEach(file => fs.unlinkSync(file.path));
 
     res.json({
@@ -127,7 +129,6 @@ app.post('/merge-pdfs', upload.array('pdfs', 10), async (req, res) => {
   } catch (error) {
     console.error('PDF merging error:', error);
     
-    // Clean up files in case of error
     if (req.files) {
       req.files.forEach(file => {
         if (fs.existsSync(file.path)) {
@@ -140,7 +141,7 @@ app.post('/merge-pdfs', upload.array('pdfs', 10), async (req, res) => {
   }
 });
 
-// Endpoint to split PDF (bonus feature)
+// Endpoint to split PDF
 app.post('/split-pdf', upload.single('pdf'), async (req, res) => {
   try {
     if (!req.file || req.file.mimetype !== 'application/pdf') {
@@ -163,7 +164,6 @@ app.post('/split-pdf', upload.single('pdf'), async (req, res) => {
     const actualEnd = end && end <= totalPages ? end : totalPages;
     const newPdf = await PDFLib.create();
     
-    // Copy specified pages (convert to 0-based index)
     const pageIndices = Array.from(
       { length: actualEnd - start + 1 }, 
       (_, i) => start - 1 + i
@@ -172,14 +172,12 @@ app.post('/split-pdf', upload.single('pdf'), async (req, res) => {
     const pages = await newPdf.copyPages(pdf, pageIndices);
     pages.forEach(page => newPdf.addPage(page));
 
-    // Save split PDF
     const splitBytes = await newPdf.save();
     const splitFileName = `split-${Date.now()}.pdf`;
     const splitPath = path.join(mergedDir, splitFileName);
     
     fs.writeFileSync(splitPath, splitBytes);
 
-    // Clean up original file
     fs.unlinkSync(req.file.path);
 
     res.json({
@@ -229,7 +227,6 @@ app.post('/file-info', upload.single('file'), async (req, res) => {
       };
     }
 
-    // Clean up file
     fs.unlinkSync(req.file.path);
 
     res.json(info);
@@ -252,4 +249,6 @@ app.listen(port, () => {
   console.log('- POST /merge-pdfs (PDF merging)');
   console.log('- POST /split-pdf (PDF splitting)');
   console.log('- POST /file-info (file information)');
+  console.log('- POST /api/convert-to-pdf (file to PDF conversion)');
+  console.log('- GET /api/supported-types (list supported file types)');
 });

@@ -45,7 +45,7 @@ function HomePage({ onNavigate }) {
               <div className="option-icon image-icon">
                 <Image size={32} />
               </div>
-              <div className="option-badge">Popular</div>
+              <div className="option-badge new">Popular</div>
             </div>
             
             <div className="option-content">
@@ -138,7 +138,8 @@ function HomePage({ onNavigate }) {
 
 
         {/* pdf spliter*/}
-                <div 
+        <div className="options-grid">
+        <div 
           className="option-card split-card"
           onClick={() => window.location.href = '/split'}
         >
@@ -185,6 +186,57 @@ function HomePage({ onNavigate }) {
             </div>
           </div>
         </div>
+
+        {/* pdf converter*/}
+              <div 
+  className="option-card convert-card"
+  onClick={() => window.location.href = '/convert'}
+>
+  <div className="option-header">
+    <div className="option-icon convert-icon">
+      <FileText size={32} />
+    </div>
+    <div className="option-badge new">Popular</div>
+  </div>
+  
+  <div className="option-content">
+    <h3>Convert to PDF</h3>
+    <p>Transform your documents and images into professional PDF format with ease and speed.</p>
+    
+    <div className="option-features">
+      <div className="feature-item">
+        <FileText size={16} />
+        <span>Supports many file types</span>
+      </div>
+      <div className="feature-item">
+        <Zap size={16} />
+        <span>Fast & reliable processing</span>
+      </div>
+      <div className="feature-item">
+        <Download size={16} />
+        <span>Instant download</span>
+      </div>
+    </div>
+  </div>
+
+  <div className="option-footer">
+    <span>Start Converting</span>
+    <ArrowRight size={20} />
+  </div>
+  
+
+  <div className="option-stats">
+    <div className="stat-item">
+      <span className="stat-number">DOC, PPT, JPG</span>
+      <span className="stat-label">Supported Formats</span>
+    </div>  
+    <div className="stat-item">
+      <span className="stat-number">PDF</span>
+      <span className="stat-label">Output Format</span>
+      </div>
+    </div>
+  </div>
+</div>
 
 
         {/* Features Section */}
