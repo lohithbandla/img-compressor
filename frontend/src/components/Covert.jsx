@@ -262,7 +262,31 @@ const Convert = () => {
           </p>
         </div>
 
-        
+
+        {/* Navigation Tabs */}
+        <div className="flex justify-center mb-8 flex-wrap gap-3">
+          {[
+            { id: 'convert', label: 'Convert to PDF', icon: <FileText className="w-4 h-4" /> },
+            { id: 'compress', label: 'Compress Images', icon: <Settings className="w-4 h-4" /> },
+            { id: 'merge', label: 'Merge PDFs', icon: <FilePlus className="w-4 h-4" /> },
+            { id: 'split', label: 'Split PDF', icon: <Split className="w-4 h-4" /> },
+            { id: 'info', label: 'File Info', icon: <Info className="w-4 h-4" /> },
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => {
+                setActiveTab(tab.id);
+                setFiles([]);
+                setResult(null);
+              }}
+              className={`tab-button ${activeTab === tab.id ? 'active' : ''} flex items-center gap-2`}
+            >
+              {tab.icon}
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
 
         {/* Tab Content */}
         <div className="max-w-4xl mx-auto">
