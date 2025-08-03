@@ -1,4 +1,3 @@
-/* HomePage.css */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 .home-container {
@@ -403,7 +402,6 @@
   text-align: center;
 }
 
-
 .feature-card:hover {
   background: rgba(255, 255, 255, 0.1);
   transform: translateY(-5px);
@@ -482,6 +480,50 @@
   text-transform: uppercase;
   letter-spacing: 0.1em;
   font-weight: 500;
+}
+
+/* Split PDF card */
+.split-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(15px);
+  border-radius: 2rem;
+  padding: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 450px;
+}
+
+.split-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 20px 40px rgba(168, 85, 247, 0.3);
+}
+
+.split-icon {
+  background: linear-gradient(135deg, #a855f7, #ec4899);
+  width: 4rem;
+  height: 4rem;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  position: relative;
+}
+
+.split-icon::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 1rem;
+  background: inherit;
+  animation: ping 3s ease-in-out infinite;
+  opacity: 0.3;
 }
 
 /* Responsive Design */

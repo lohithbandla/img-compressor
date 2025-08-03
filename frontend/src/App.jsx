@@ -6,6 +6,7 @@ import viteLogo from './assets/logo.png';
 import './App.css';
 import { Home } from 'lucide-react';
 import HomePage from './components/HomePage';
+import PDFProcessor from './components/SplitPdfs';
 
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
     
     <BrowserRouter>
       <Routes>
+        <Route path='/split' element={<PDFProcessor/>}></Route>
         <Route path="/" element={<HomePage />} />
         <Route path="/compress" element={<ImageCompressor />} />
         <Route path="/merge" element={<MergePdf />} />

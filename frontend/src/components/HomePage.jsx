@@ -1,5 +1,6 @@
 import React from 'react';
-import { Image, FileText, ArrowRight, Zap, Shield, Download } from 'lucide-react';
+import { Image, FileText, ArrowRight, Zap, Shield, Download, Scissors } from 'lucide-react';
+
 import './HomePage.css';
 
 function HomePage({ onNavigate }) {
@@ -132,6 +133,58 @@ function HomePage({ onNavigate }) {
             </div>
           </div>
         </div>
+
+
+
+        {/* pdf spliter*/}
+                <div 
+          className="option-card split-card"
+          onClick={() => window.location.href = '/split'}
+        >
+          <div className="option-header">
+            <div className="option-icon split-icon">
+              <Scissors size={32} />
+            </div>
+            <div className="option-badge new">New</div>
+          </div>
+          
+          <div className="option-content">
+            <h3>Split PDF</h3>
+            <p>Split your PDF files by selecting page ranges. Quick and easy PDF splitting in your browser.</p>
+            
+            <div className="option-features">
+              <div className="feature-item">
+                <Scissors size={16} />
+                <span>Custom Page Ranges</span>
+              </div>
+              <div className="feature-item">
+                <Zap size={16} />
+                <span>Fast Processing</span>
+              </div>
+              <div className="feature-item">
+                <Download size={16} />
+                <span>Instant Download</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="option-footer">
+            <span>Start Splitting</span>
+            <ArrowRight size={20} />
+          </div>
+
+          <div className="option-stats">
+            <div className="stat-item">
+              <span className="stat-number">PDF</span>
+              <span className="stat-label">Format</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-number">Split</span>
+              <span className="stat-label">Page Ranges</span>
+            </div>
+          </div>
+        </div>
+
 
         {/* Features Section */}
         <div className="features-section">
