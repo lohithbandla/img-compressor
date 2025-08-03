@@ -1,19 +1,27 @@
 import React, { useState } from 'react';
-import { Loader2, Upload, Download } from 'lucide-react';
-// import reactLogo from './assets/react.svg'
-import viteLogo from './assets/logo.png'
-import './App.css'
-import ImageCompressor from './ImageCompressor'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'; // ✅ Import these
+import ImageCompressor from './ImageCompressor';
+import MergePdf from './components/MergePdfs'; // ✅ Make sure this component exists
+import viteLogo from './assets/logo.png';
+import './App.css';
+import { Home } from 'lucide-react';
+import HomePage from './components/HomePage';
+
+
 function App() {
-  const [count, setCount] = useState(0)
+
 
   return (
-    <>
-      <div className="App">
-      <ImageCompressor />
-    </div>
-    </>
-  )
+    
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/compress" element={<ImageCompressor />} />
+        <Route path="/merge" element={<MergePdf />} />
+        
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;

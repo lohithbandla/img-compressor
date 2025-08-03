@@ -65,7 +65,7 @@ function ImageCompressor() {
 
     try {
       // Replace this with your actual API call
-      const response = await fetch(`${URLBackend}/upload`, {
+      const response = await fetch(`${URLBackend}upload`, {
         method: 'POST',
         body: formData,
       });
@@ -139,7 +139,7 @@ function ImageCompressor() {
               <Zap className="icon-zap animate-bounce" />
             </div>
           </div>
-          <h1 className="title">ImageZen</h1>
+          <h1 className="title">Image Compressor</h1>
           <p className="subtitle">
             Transform your images with intelligent compression. Maintain quality while dramatically reducing file sizes.
           </p>
