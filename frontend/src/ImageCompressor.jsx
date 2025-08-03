@@ -4,8 +4,8 @@ import { Loader2, Upload, Download, Image, Zap, Sparkles } from 'lucide-react';
 import './index.css';
 
 function ImageCompressor() {
-  const URLBackend = import.meta.env.VITE_BACKEND || "https://img-compressor.onrender.com";
-  // const URLBackend = ;
+  const URLBackend = import.meta.env.VITE_BACKEND || "https://img-compressor.onrender.com/";
+  // const URLBackend = "https://img-compressor.onrender.com";
   const [file, setFile] = useState(null);
   const [quality, setQuality] = useState(80);
   const [preview, setPreview] = useState(null);
@@ -76,8 +76,7 @@ function ImageCompressor() {
       }
 
       const data = await response.json();
-      setCompressedUrl(`${URLBackend.replace(/\/+$/, '')}/${data.compressedFileUrl.replace(/^\/+/, '')}`);
-
+      setCompressedUrl(`${URLBackend}/${data.compressedFileUrl}`);
       
       // Get compressed file size (you might need to adjust this based on your API response)
       const compressedResponse = await fetch(`${URLBackend}/${data.compressedFileUrl}`);
@@ -267,21 +266,21 @@ function ImageCompressor() {
                       alt="Compressed" 
                       className="image-preview" 
                     />
-                    {/* <div className="compression-badge">
+                    <div className="compression-badge">
                       -{compressionRatio}%
-                    </div> */}
+                    </div>
                   </div>
 
-                  {/* <div className="stats-grid">
+                  <div className="stats-grid">
                     <div className="stat-card">
                       <p className="stat-label">New Size</p>
                       <p className="stat-value">{formatFileSize(compressedSize)}</p>
                     </div>
                     <div className="stat-card">
-                      <p className="stat-label"storea>Saved</p>
+                      <p className="stat-label">Saved</p>
                       <p className="stat-value saved">{formatFileSize(originalSize - compressedSize)}</p>
                     </div>
-                  </div> */}
+                  </div>
 
                   <button
                     onClick={handleDownload}
