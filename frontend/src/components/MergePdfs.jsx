@@ -4,8 +4,7 @@ import './MergePdfs.css'; // Import the CSS file
 
 
 const URLBackend = import.meta.env.VITE_BACKEND || "https://img-compressor.onrender.com";
-
-
+// const URLBackend = "https://img-compressor.onrender.com";
 function MergePdfs() {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [isUploading, setIsUploading] = useState(false);

@@ -52,6 +52,10 @@ const upload = multer({
 app.use('/compressed', express.static('compressed'));
 app.use('/merged', express.static('merged'));
 
+
+app.get('/', (req, res) => {
+  res.send('Server is live');
+});
 // Original image compression endpoint
 app.post('/upload', upload.single('file'), async (req, res) => {
   try {
