@@ -3,12 +3,15 @@ const multer = require('multer');
 const sharp = require('sharp');
 const path = require('path');
 const fs = require('fs');
-const PDFDocument = require('pdfkit');
 const { PDFDocument: PDFLib } = require('pdf-lib');
 const cors = require('cors');
+const imagemin = require('imagemin').default;
+const imageminMozjpeg = require('imagemin-mozjpeg').default;
+const imageminPngquant = require('imagemin-pngquant').default;
+require('dotenv').config();
 
-// Import conversion routes
 const conversionRoutes = require('./routes/conversion');
+
 
 const app = express();
 
@@ -66,28 +69,56 @@ app.get('/', (req, res) => {
 // Original image compression endpoint
 app.post('/upload', upload.single('file'), async (req, res) => {
   try {
-    const quality = parseInt(req.body.quality) || 80;
+    if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+    
+    const quality = parseInt(req.body.quality, 10) || 80;
     const filePath = req.file.path;
-    const compressedPath = `compressed/${req.file.filename}`;
+    const originalSize = fs.statSync(filePath).size;
+    const ext = path.extname(req.file.originalname).toLowerCase();
 
-    // Compress the image
-    await sharp(filePath)
-      .resize(800)
-      .jpeg({ quality: quality })
-      .toFile(compressedPath);
+    let plugins = [];
+    if (ext === '.jpg' || ext === '.jpeg') {
+      plugins = [imageminMozjpeg({ quality })];
+    } else if (ext === '.png') {
+      // Clamp quality between 0.1 and 1 for imagemin-pngquant
+      const q = Math.min(Math.max(quality / 100, 0.1), 1);
+      plugins = [imageminPngquant({ quality: [q - 0.1, q] })];
+    } else {
+      // Unsupported format, remove upload and respond with error
+      fs.unlinkSync(filePath);
+      return res.status(400).json({ error: 'Unsupported file format' });
+    }
 
-    // Delete the original uploaded file
+    // Perform compression with imagemin
+    const files = await imagemin([filePath], {
+      destination: compressedDir,
+      plugins,
+    });
+
+    // Delete original uploaded file
     fs.unlinkSync(filePath);
 
+    if (!files || files.length === 0) {
+      return res.status(500).json({ error: 'Compression failed' });
+    }
+
+    const outputFile = path.basename(files[0].destinationPath);
+    const compressedFilePath = path.join(compressedDir, outputFile);
+    const compressedSize = fs.statSync(compressedFilePath).size;
+
     res.json({
-      compressedFileUrl: compressedPath,
-      message: 'Image compressed successfully'
+      compressedFileUrl: `/compressed/${outputFile}`,
+      message: 'Image compressed successfully!',
+      originalSize,
+      compressedSize,
     });
-  } catch (error) {
-    console.error('Image compression error:', error);
+
+  } catch (err) {
+    console.error('Image compression error:', err);
     res.status(500).send('Error processing image');
   }
 });
+
 
 // PDF merging endpoint
 app.post('/merge-pdfs', upload.array('pdfs', 10), async (req, res) => {
