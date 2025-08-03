@@ -3,7 +3,7 @@ import { Upload, X, FileText, Download, Loader, AlertCircle, CheckCircle, ArrowU
 import './MergePdfs.css'; // Import the CSS file
 
 
-const URLBackend = import.meta.env.VITE_BACKEND || "https://img-compressor.onrender.com";
+const URLBackend = "https://img-compressor.onrender.com/";
 // const URLBackend = "https://img-compressor.onrender.com";
 function MergePdfs() {
   const [selectedFiles, setSelectedFiles] = useState([]);
@@ -62,7 +62,7 @@ function MergePdfs() {
     });
 
     try {
-      const response = await fetch(URLBackend+"merge-pdfs", {
+      const response = await fetch(`${URLBackend}merge-pdfs`, {
         method: 'POST',
         body: formData,
       });
@@ -70,7 +70,7 @@ function MergePdfs() {
       const result = await response.json();
 
       if (response.ok) {
-         setMergedFileUrl(`${URLBackend}/${result.mergedFileUrl}`);
+         setMergedFileUrl(`${URLBackend}${result.mergedFileUrl}`);
         setSuccess(`Successfully merged ${selectedFiles.length} PDFs (${result.pageCount} total pages)`);
          setSelectedFiles([]);
       } else {

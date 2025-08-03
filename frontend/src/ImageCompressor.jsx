@@ -4,7 +4,7 @@ import { Loader2, Upload, Download, Image, Zap, Sparkles } from 'lucide-react';
 import './index.css';
 
 function ImageCompressor() {
-  const URLBackend = import.meta.env.VITE_BACKEND || "https://img-compressor.onrender.com";
+  const URLBackend = import.meta.env.VITE_BACKEND || "https://img-compressor.onrender.com/";
   // const URLBackend = "https://img-compressor.onrender.com";
   const [file, setFile] = useState(null);
   const [quality, setQuality] = useState(80);
