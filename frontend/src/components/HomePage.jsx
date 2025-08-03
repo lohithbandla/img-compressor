@@ -6,6 +6,7 @@ import './HomePage.css';
 function HomePage({ onNavigate }) {
   return (
     <div className="home-container">
+      
       {/* Animated background elements */}
       <div className="bg-elements">
         <div className="bg-element bg-element-1"></div>

@@ -7,14 +7,14 @@ import './App.css';
 import { Home } from 'lucide-react';
 import HomePage from './components/HomePage';
 import PDFProcessor from './components/SplitPdfs';
-
+import { Analytics } from "@vercel/analytics/react"
 
 function App() {
 
 
   return (
-    
-    <BrowserRouter>
+    <>
+      <BrowserRouter>
       <Routes>
         <Route path='/split' element={<PDFProcessor/>}></Route>
         <Route path="/" element={<HomePage />} />
@@ -22,7 +22,9 @@ function App() {
         <Route path="/merge" element={<MergePdf />} />
         
       </Routes>
-    </BrowserRouter>
+      </BrowserRouter>
+      <Analytics/>
+    </>
   );
 }
 
